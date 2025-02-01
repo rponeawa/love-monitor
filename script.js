@@ -174,26 +174,26 @@ class LoveChronicle {
         const memorySection = this.content.querySelector('.content-section:nth-child(2)');
         if (memorySection) {
             const titleElem = memorySection.querySelector('div:first-child');
-            const specialDay = memorySection.querySelector('.memory-highlight');
             
             memorySection.innerHTML = '';
             memorySection.appendChild(titleElem);
             
             if (this.todaySpecial) {
-                memorySection.appendChild(specialDay || (() => {
-                    const elem = document.createElement('div');
-                    elem.className = 'memory-highlight';
-                    elem.innerHTML = `<span>🎉 ${this.todaySpecial.desc} [今天]</span>`;
-                    return elem;
-                })());
+                const elem = document.createElement('div');
+                elem.className = 'memory-highlight';
+                if (this.todaySpecial.isBirthday) {
+                    elem.innerHTML = `<span>🎉 ${this.todaySpecial.desc}</span>`;
+                } else {
+                    const daysDiff = Math.ceil((this.now - this.todaySpecial.date) / 86400000);
+                    elem.innerHTML = `<span>🎉 ${daysDiff} 天前 ${this.todaySpecial.desc}</span>`;
+                }
+                memorySection.appendChild(elem);
             }
 
             const memories = this.selectMemories();
             memories.forEach(mem => {
-                const text = `⌛ ${mem.date.getFullYear()}-${
-                    (mem.date.getMonth()+1).toString().padStart(2,'0')}-${
-                    mem.date.getDate().toString().padStart(2,'0')} ${
-                    mem.desc}`;
+                const daysDiff = Math.ceil((this.now - mem.date) / 86400000);
+                const text = `⌛ ${daysDiff} 天前 ${mem.desc}`;
                 const elem = document.createElement('div');
                 elem.textContent = text;
                 memorySection.appendChild(elem);
@@ -304,18 +304,19 @@ class LoveChronicle {
             if(this.todaySpecial) {
                 const elem = document.createElement('div');
                 elem.className = 'memory-highlight';
-                elem.innerHTML = `
-                    <span>🎉 ${this.todaySpecial.desc} [今天]</span>
-                `;
+                if (this.todaySpecial.isBirthday) {
+                    elem.innerHTML = `<span>🎉 ${this.todaySpecial.desc}</span>`;
+                } else {
+                    const daysDiff = Math.ceil((this.now - this.todaySpecial.date) / 86400000);
+                    elem.innerHTML = `<span>🎉 ${daysDiff} 天前 ${this.todaySpecial.desc}</span>`;
+                }
                 container.appendChild(elem);
             }
 
             const memories = this.selectMemories();
             memories.forEach(mem => {
-                const text = `⌛ ${mem.date.getFullYear()}-${ 
-                    (mem.date.getMonth()+1).toString().padStart(2,'0')}-${
-                    mem.date.getDate().toString().padStart(2,'0')} ${
-                    mem.desc}`;
+                const daysDiff = Math.ceil((this.now - mem.date) / 86400000);
+                const text = `⌛ ${daysDiff} 天前 ${mem.desc}`;
                 const elem = document.createElement('div');
                 elem.textContent = text;
                 container.appendChild(elem);
