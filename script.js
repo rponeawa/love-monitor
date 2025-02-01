@@ -1,6 +1,6 @@
 const TimeAnchor = {
     FIRST_KNOW: new Date(2022, 5, 13),
-    GRADUATION: new Date(2027, 5, 1)
+    GRADUATION: new Date(2030, 6, 1)
 };
 
 const SpecialDays = [
