@@ -144,7 +144,7 @@ class LoveChronicle {
             const titleElem = futureSection.querySelector('div:first-child');
             
             const futureContent = document.createElement('div');
-            futureContent.innerHTML = `<div>🏡 共同生活计划</div>`;
+            futureContent.innerHTML = `<div>🏡 在一起的计划...</div>`;
             
             const progressBar = document.createElement('div');
             progressBar.style.marginTop = '0.8rem';
@@ -326,7 +326,7 @@ class LoveChronicle {
     createFutureContent() {
         return (container) => {
             const futureContent = document.createElement('div');
-            futureContent.innerHTML = `<div>🏡 共同生活计划</div>`;
+            futureContent.innerHTML = `<div>🏡 在一起的计划...</div>`;
             
             const progressBar = document.createElement('div');
             progressBar.style.marginTop = '0.8rem';
