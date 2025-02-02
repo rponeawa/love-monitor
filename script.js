@@ -4,7 +4,7 @@ const TimeAnchor = {
 };
 
 const SpecialDays = [
-    { date: new Date(2008, 6, 26),  desc: "生日快乐❤️！！", isBirthday: true },
+    { date: new Date(2008, 6, 26),  desc: "生日快乐！！❤️", isBirthday: true },
     { date: new Date(2022, 5, 13),  desc: "故事开始的第一页" },
     { date: new Date(2023, 0, 10),  desc: "初雪落下的第一次触碰" },
     { date: new Date(2023, 3, 7),   desc: "凌晨的温柔陪伴" },
@@ -94,6 +94,8 @@ class LoveChronicle {
         this.todaySpecial = this.getTodaySpecial();
         this.lastMemories = new Set();
         this.lastDate = this.now.getDate();
+        this.hasAnimatedProgress = false;
+        this.animatedProgress = 0;
 
         document.addEventListener('click', this.handleClick.bind(this));
         
@@ -153,15 +155,15 @@ class LoveChronicle {
             barContainer.className = 'progress-bar';
             const barFill = document.createElement('div');
             barFill.className = 'progress-fill';
-            barFill.style.width = `${this.progress}%`;
             barContainer.appendChild(barFill);
             
             const textContainer = document.createElement('div');
             textContainer.style.marginTop = '0.4rem';
-            textContainer.textContent = `旅程进度 ${this.progress}%`;
             
             progressBar.appendChild(barContainer);
             progressBar.appendChild(textContainer);
+            
+            this.animateProgress(container, barFill, textContainer);
             
             futureSection.innerHTML = '';
             futureSection.appendChild(titleElem);
@@ -185,7 +187,7 @@ class LoveChronicle {
                     elem.innerHTML = `<span>🎉 ${this.todaySpecial.desc}</span>`;
                 } else {
                     const daysDiff = Math.ceil((this.now - this.todaySpecial.date) / 86400000);
-                    elem.innerHTML = `<span>🎉 ${daysDiff} 天前 ${this.todaySpecial.desc}</span>`;
+                    elem.innerHTML = `<span>🎉 ${daysDiff} 天前 ${this.todaySpecial.desc} [今天]</span>`;
                 }
                 memorySection.appendChild(elem);
             }
@@ -308,7 +310,7 @@ class LoveChronicle {
                     elem.innerHTML = `<span>🎉 ${this.todaySpecial.desc}</span>`;
                 } else {
                     const daysDiff = Math.ceil((this.now - this.todaySpecial.date) / 86400000);
-                    elem.innerHTML = `<span>🎉 ${daysDiff} 天前 ${this.todaySpecial.desc}</span>`;
+                    elem.innerHTML = `<span>🎉 ${daysDiff} 天前 ${this.todaySpecial.desc} [今天]</span>`;
                 }
                 container.appendChild(elem);
             }
@@ -336,18 +338,53 @@ class LoveChronicle {
             barContainer.className = 'progress-bar';
             const barFill = document.createElement('div');
             barFill.className = 'progress-fill';
-            barFill.style.width = `${this.progress}%`;
             barContainer.appendChild(barFill);
             
             const textContainer = document.createElement('div');
             textContainer.style.marginTop = '0.4rem';
-            textContainer.textContent = `旅程进度 ${this.progress}%`;
             
             progressBar.appendChild(barContainer);
             progressBar.appendChild(textContainer);
+            
+            this.animateProgress(container, barFill, textContainer);
+            
             futureContent.appendChild(progressBar);
             container.appendChild(futureContent);
         };
+    }
+
+    animateProgress(container, progressFill, textContainer) {
+        if (!this.hasAnimatedProgress) {
+            progressFill.style.width = '0%';
+            this.animatedProgress = 0;
+            textContainer.textContent = `旅程进度 0%`;
+
+            const targetProgress = parseFloat(this.progress);
+            const duration = 250;
+            const startTime = performance.now();
+
+            const animate = (currentTime) => {
+                const elapsed = currentTime - startTime;
+                const progress = Math.min(elapsed / duration, 1);
+                
+                this.animatedProgress = progress * targetProgress;
+                
+                const currentProgress = Math.round(this.animatedProgress * 10) / 10;
+                progressFill.style.width = `${currentProgress}%`;
+                textContainer.textContent = `旅程进度 ${currentProgress}%`;
+
+                if (progress < 1) {
+                    requestAnimationFrame(animate);
+                } else {
+                    this.hasAnimatedProgress = true;
+                }
+            };
+
+            requestAnimationFrame(animate);
+        } else {
+            progressFill.style.width = `${this.progress}%`;
+            textContainer.textContent = `旅程进度 ${this.progress}%`;
+        }
     }
 
     checkMilestone() {
