@@ -6,6 +6,7 @@ const TimeAnchor = {
 const SpecialDays = [
     { date: new Date(2008, 6, 26),  desc: "生日快乐！！❤️", isBirthday: true },
     { date: new Date(2007, 10, 20),  desc: "快祝我生日快乐（（什么", isBirthday: true },
+    { date: new Date(0, 1, 14),  desc: "情人节快乐～❤️", isBirthday: true },
     { date: new Date(2022, 5, 13),  desc: "故事开始的第一页" },
     { date: new Date(2023, 0, 10),  desc: "初雪落下的第一次触碰" },
     { date: new Date(2023, 3, 7),   desc: "凌晨的温柔陪伴" },
