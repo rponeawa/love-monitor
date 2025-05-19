@@ -159,6 +159,7 @@ body {
     cursor: pointer; 
     opacity: 0;
     animation: fadeInOverlay 0.5s ease-out forwards;
+    -webkit-tap-highlight-color: transparent;
 }
 
 @keyframes fadeInOverlay {

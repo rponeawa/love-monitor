@@ -441,6 +441,7 @@ class LoveChronicle {
             if (event.animationName === 'fadeInOverlay') {
                 overlay.addEventListener('click', function handleCloseClick() {
                     overlay.classList.add('closing');
+                    overlay.style.pointerEvents = 'none';
                     
                     overlay.addEventListener('animationend', function handleFadeOutEnd(closeEvent) {
                         if (closeEvent.animationName === 'fadeOutSlideDownOverlay') {
