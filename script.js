@@ -265,6 +265,7 @@ class LoveChronicle {
         this.createSection('记忆标本', this.createMemoryContent());
         this.createSection('未来之书', this.createFutureContent());
         this.checkMilestone();
+        this.checkFor520Special();
     }
 
     createMainHeader() {
@@ -405,6 +406,89 @@ class LoveChronicle {
             };
             createSparkles();
             setInterval(createSparkles, 1200);
+        }
+    }
+
+    checkFor520Special() {
+        const today = this.now;
+        if (today.getMonth() === 4 && today.getDate() === 20) {
+            const currentYear = today.getFullYear();
+            if (currentYear >= 2023) {
+                const count = currentYear - 2023 + 1;
+                this.show520HeartEffect(count);
+            }
+        }
+    }
+
+    show520HeartEffect(count) {
+        const overlay = document.createElement('div');
+        overlay.id = 'loveDayOverlay';
+
+        const messageEl = document.createElement('p');
+        messageEl.textContent = `💖 陪你的第 ${count} 个 520～ 💖`;
+        overlay.appendChild(messageEl);
+
+        const hintEl = document.createElement('div');
+        hintEl.className = 'close-hint';
+        hintEl.textContent = '点击任意处关闭';
+        overlay.appendChild(hintEl);
+
+        document.body.appendChild(overlay);
+
+        this.launchHeartParticles(overlay);
+
+        overlay.addEventListener('animationend', function handleFadeInEnd(event) {
+            if (event.animationName === 'fadeInOverlay') {
+                overlay.addEventListener('click', function handleCloseClick() {
+                    overlay.classList.add('closing');
+                    
+                    overlay.addEventListener('animationend', function handleFadeOutEnd(closeEvent) {
+                        if (closeEvent.animationName === 'fadeOutSlideDownOverlay') {
+                            if (overlay.parentNode) {
+                                overlay.parentNode.removeChild(overlay);
+                            }
+                        }
+                    }, { once: true });
+                }, { once: true });
+            }
+        }, { once: true });
+    }
+
+    launchHeartParticles(overlayElement) {
+        const heartColors = ['var(--neon-pink)', '#ff89ab', '#ffb3c6', '#fff1f2', 'white'];
+        
+        const centerX = window.innerWidth / 2;
+        const centerY = window.innerHeight / 2;
+
+        const particleCount = 70;
+        const heartScale = 7;
+
+        for (let i = 0; i < particleCount; i++) {
+            const t = (Math.PI * 2 * i) / particleCount;
+
+            const heartX = heartScale * (16 * Math.pow(Math.sin(t), 3));
+            const heartY = -heartScale * (13 * Math.cos(t) - 5 * Math.cos(2*t) - 2 * Math.cos(3*t) - Math.cos(4*t));
+
+            const particle = document.createElement('div');
+            particle.className = 'heart-particle';
+            
+            particle.style.left = `${centerX}px`;
+            particle.style.top = `${centerY}px`;
+            particle.style.background = heartColors[Math.floor(Math.random() * heartColors.length)];
+            
+            particle.style.setProperty('--heart-tx', `${heartX}px`);
+            particle.style.setProperty('--heart-ty', `${heartY - (heartScale * 4)}px`); 
+
+            particle.style.animationDelay = `${i * 15}ms`;
+
+            overlayElement.appendChild(particle);
+
+            const totalDuration = (i * 15) + 1200 + 300;
+            setTimeout(() => {
+                if (particle.parentNode) {
+                    particle.parentNode.removeChild(particle);
+                }
+            }, totalDuration);
         }
     }
 }

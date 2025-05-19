@@ -143,3 +143,100 @@ body {
     75% { opacity: 0.7; transform: scale(1.2); }
     100% { opacity: 0; transform: scale(1); }
 }
+
+#loveDayOverlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    background: rgba(15, 23, 42, 0.85); 
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    z-index: 1000;
+    cursor: pointer; 
+    opacity: 0;
+    animation: fadeInOverlay 0.5s ease-out forwards;
+}
+
+@keyframes fadeInOverlay {
+    to { opacity: 1; }
+}
+
+#loveDayOverlay.closing {
+    animation: fadeOutSlideDownOverlay 0.5s ease-out forwards;
+}
+
+@keyframes fadeOutSlideDownOverlay {
+    from {
+        opacity: 1;
+        transform: translateY(0);
+    }
+    to {
+        opacity: 0;
+        transform: translateY(50px);
+    }
+}
+
+#loveDayOverlay p {
+    font-size: 1.8em;
+    color: white;
+    text-shadow: 0 0 8px var(--neon-pink), 0 0 15px var(--neon-pink), 0 0 25px var(--neon-pink);
+    padding: 20px 30px;
+    background: rgba(30, 41, 59, 0.7);
+    border: 1px solid var(--neon-pink);
+    border-radius: 12px;
+    margin-bottom: 40px; 
+    text-align: center;
+    animation: fadeInText 0.8s ease-out 0.3s forwards;
+    opacity: 0;
+    transform: translateY(20px);
+}
+
+@keyframes fadeInText {
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+#loveDayOverlay .close-hint {
+    font-size: 0.9em;
+    color: #bbb;
+    margin-top: 0px;
+    text-shadow: none;
+    animation: fadeInText 0.8s ease-out 0.6s forwards;
+    opacity: 0;
+    transform: translateY(10px);
+}
+
+.heart-particle {
+    position: absolute;
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    pointer-events: none;
+    opacity: 0;
+    transform-origin: center center;
+    animation: heartExplode 1.2s ease-out forwards; 
+}
+
+@keyframes heartExplode {
+    0% {
+        transform: translate(0, 0) scale(0.3);
+        opacity: 0.5;
+    }
+    30% {
+        opacity: 1;
+    }
+    70% { 
+        transform: translate(var(--heart-tx), var(--heart-ty)) scale(1);
+        opacity: 1;
+    }
+    100% {
+        transform: translate(var(--heart-tx), var(--heart-ty)) scale(0.2);
+        opacity: 0;
+    }
+}
